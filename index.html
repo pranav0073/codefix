@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+    </style>
+  </head>
+  <body>
+    <pre id="messages"></pre>
+    <tr>
+        <td>Select a File to Load:</td>
+        <td><input type="file" id="fileToLoad"></td>
+        <td><button id="up">Load Selected File</button><td>
+        <p id="inputTextToSave"></p>
+    </tr>
+    <form action="">
+      <input type="file" name="datafile" size="40">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+  </body>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script>
+    $(function () {
+      var loc = document.location.pathname;
+      var socket = io();
+      $('form').submit(function(){
+
+
+        var value = {val : $('#m').val(), loc:loc}
+        socket.emit('chat message', value);
+        $('#m').val('');
+        return false;
+      });
+      socket.on('chat message'+loc, function(msg){
+        //alert('x');
+        $('#messages').append($('<li>').text(msg));
+
+        });
+
+      $("#up").click(function(){
+        alert("The paragraph was clicked.");
+        action();
+      });
+
+    var action =   function(){
+
+        var fileToLoad = document.getElementById("fileToLoad").files[0];
+
+        var fileReader = new FileReader();
+        alert("someting");
+        console.log(fileReader);
+        fileReader.addEventListener('load', function() {
+          alert("someting new");
+            var res = reader.result;
+            console.log(res);
+        });
+        fileReader.onload = function(fileLoadedEvent){
+          alert("someting new");
+            var textFromFileLoaded = fileLoadedEvent.target.result;
+            console.log(textFromFileLoaded);
+            socket.emit('chat message', textFromFileLoaded);
+          //  document.getElementById("inputTextToSave").value = textFromFileLoaded;
+        };
+
+        //fileReader.readAsText(fileToLoad, "UTF-8");
+      }
+
+    });
+
+  </script>
+
+
+</html>
