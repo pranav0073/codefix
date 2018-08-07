@@ -30,9 +30,7 @@ app.get('/test/*', function(req, res){
 
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
-    console.log(msg);
-
-    console.log(msg.val);
+    
     console.log(io.listenerCount('chat message'));
     //io.emit('chat message'+msg.loc, msg.val);
   });
