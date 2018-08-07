@@ -1,0 +1,395 @@
+
+
+<!doctype html>
+<html>
+  <head>
+    <script src="lib/codemirror.js"></script>
+    <link rel="stylesheet" href="/lib/codemirror.css" type="text/css">
+    <link rel="stylesheet" href="/theme/neo.css" type="text/css">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="mode/javascript/javascript.js"></script>
+    <script src="mode/css/css.js"></script>
+    <title>Socket.IO chat</title>
+    <style>
+
+    .tree, .tree ul {
+  margin:0;
+  padding:0;
+  list-style:none
+}
+.tree ul {
+  margin-left:1em;
+  position:relative
+}
+.tree ul ul {
+  margin-left:.5em
+}
+.tree ul:before {
+  content:"";
+  display:block;
+  width:0;
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  border-left:1px solid
+}
+.tree li {
+  margin:0;
+  padding:0 1em;
+  line-height:2em;
+  color:#369;
+  font-weight:700;
+  position:relative
+}
+.tree ul li:before {
+  content:"";
+  display:block;
+  width:10px;
+  height:0;
+  border-top:1px solid;
+  margin-top:-1px;
+  position:absolute;
+  top:1em;
+  left:0
+}
+.tree ul li:last-child:before {
+  background:#fff;
+  height:auto;
+  top:1em;
+  bottom:0
+}
+.indicator {
+  margin-right:5px;
+}
+.tree li a {
+  text-decoration: none;
+  color:#369;
+}
+.tree li button, .tree li button:active, .tree li button:focus {
+  text-decoration: none;
+  color:#369;
+  border:none;
+  background:transparent;
+  margin:0px 0px 0px 0px;
+  padding:0px 0px 0px 0px;
+  outline: 0;
+}
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      .code{
+        background-color: #f7f7f7;
+        height: 700px;
+        overflow: scroll;
+      }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+      pre {
+        color:black;
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+    </style>
+  </head>
+  <body>
+
+
+    <div class="">
+      <div class="row">
+        <div class="col-2">
+          <a class="file nav-link" href="#item-2">trigger.txt</a>
+          <% files.forEach(function(fileName){ %>
+           <a class="file nav-link" href="#item-2"><%= fileName %></a>
+        <%  }); %>
+
+
+
+
+
+          <ul id="tree1">
+
+
+                  <!-- <br /> <code>$('#tree1').treed();</code> -->
+
+              </p>
+              <li><a href="#">TECH</a>
+
+                  <ul>
+                      <li>Company Maintenance</li>
+                      <li>Employees
+                          <ul>
+                              <li>Reports
+                                  <ul>
+                                      <li class="file">trigger.txt</li>
+                                      <li>Report2</li>
+                                      <li>Report3</li>
+                                  </ul>
+                              </li>
+                              <li>Employee Maint.</li>
+                          </ul>
+                      </li>
+                      <li>Human Resources</li>
+                  </ul>
+              </li>
+              <li>XRP
+                  <ul>
+                      <li>Company Maintenance</li>
+                      <li>Employees
+                          <ul>
+                              <li>Reports
+                                  <ul>
+                                      <li>Report1</li>
+                                      <li>Report2</li>
+                                      <li>Report3</li>
+                                  </ul>
+                              </li>
+                              <li>Employee Maint.</li>
+                          </ul>
+                      </li>
+                      <li>Human Resources</li>
+                  </ul>
+              </li>
+          </ul>
+
+
+
+
+
+
+
+
+
+
+        </div>
+        <div class="col-7 code" data-spy="scroll">
+          <!-- <pre id="messages"></pre> -->
+          <div class="card">
+              <div class="card-header">
+                CODE BLOG
+              </div>
+              <div class="card-body">
+                <textarea  id="codesnippet_readonly" name="codesnippet_readonly">
+                  //Code will be rendered here
+                </textarea>
+              </div>
+
+          </div>
+
+
+          </div>
+
+        <div class="col-3">
+          <div class="card">
+            <div class="card-header">
+              Comments
+            </div>
+            <div>
+            <div class="card-body">
+              <blockquote class="blockquote mb-0">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                <footer class="blockquote-footer">Sachin <cite title="Source Title">Source Title</cite></footer>
+
+
+              </blockquote>
+            </div>
+            <div class="card-body">
+              <blockquote class="blockquote mb-0">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                <footer class="blockquote-footer">Pranav <cite title="Source Title">Source Title</cite></footer>
+              </blockquote>
+            </div>
+            <div class="card-body">
+              <blockquote class="blockquote mb-0">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                <footer class="blockquote-footer">Hemant <cite title="Source Title">Source Title</cite></footer>
+              </blockquote>
+
+            </div>
+
+          </div>
+          </div>
+          <!-- <form action="">
+
+            <input id="m" autocomplete="off" /><button>Send</button>
+          </form> -->
+        </div>
+      </div>
+      </div>
+    </div>
+
+
+
+    <form action="">
+
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+
+  </body>
+  <!-- <script src="http://codemirror.net/addon/edit/matchbrackets.js"></script>
+  <script src="http://codemirror.net/addon/edit/continuecomment.js"></script>
+  <script src="http://codemirror.net/mode/javascript/javascript.js"></script> -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script>
+    $(function () {
+
+      var readOnlyCodeMirror = CodeMirror.fromTextArea(document.getElementById('codesnippet_readonly'), {
+
+          mode: "javascript",
+          theme: "neo",
+          lineNumbers: true,
+          readOnly: true
+      });
+      readOnlyCodeMirror.setSize(null,750);
+
+      // var editableCodeMirror = CodeMirror.fromTextArea(document.getElementById('codesnippet_editable'), {
+      //     mode: "javascript",
+      //     theme: "default",
+      //     lineNumbers: true
+      // });
+
+
+      var loc = document.location.pathname;
+      var socket = io();
+
+      $('.file').click((xval)=>{
+        console.log(xval);
+        console.log(xval.target.innerHTML);
+        var value = {val : xval.target.innerHTML, loc:loc}
+        socket.emit('chat message', value);
+        $('#m').val('');
+      });
+
+      $('form').submit(function(){
+
+
+        var value = {val : $('#m').val(), loc:loc}
+        socket.emit('chat message', value);
+        $('#m').val('');
+        return false;
+      });
+      socket.on('chat message'+loc, function(msg){
+        //alert('x');
+        //alert('ok' );
+        //$('#messages').text(msg);//($('<li>').text(msg));
+        //var textArea = document.getElementById('codesnippet_readonly');
+        //var editor = CodeMirror.fromTextArea(textArea);
+        readOnlyCodeMirror.getDoc().setValue(msg);
+        //console.log($('#codesnippet_readonly').html('msg'));
+        //$('#codesnippet_readonly').val('msg') ;
+
+
+        });
+
+      $("#up").click(function(){
+        alert("The paragraph was clicked.");
+        action();
+      });
+
+    var action =   function(){
+
+        var fileToLoad = document.getElementById("fileToLoad").files[0];
+
+        var fileReader = new FileReader();
+        alert("someting");
+        console.log(fileReader);
+        fileReader.addEventListener('load', function() {
+          alert("someting new");
+            var res = reader.result;
+            console.log(res);
+        });
+        fileReader.onload = function(fileLoadedEvent){
+          alert("someting new");
+            var textFromFileLoaded = fileLoadedEvent.target.result;
+            console.log(textFromFileLoaded);
+            socket.emit('chat message', textFromFileLoaded);
+          //  document.getElementById("inputTextToSave").value = textFromFileLoaded;
+        };
+
+
+      }
+
+      $.fn.extend({
+      treed: function (o) {
+
+        var openedClass = 'glyphicon-minus-sign';
+        var closedClass = 'glyphicon-plus-sign';
+
+        if (typeof o != 'undefined'){
+          if (typeof o.openedClass != 'undefined'){
+          openedClass = o.openedClass;
+          }
+          if (typeof o.closedClass != 'undefined'){
+          closedClass = o.closedClass;
+          }
+        };
+
+          //initialize each of the top levels
+          var tree = $(this);
+          tree.addClass("tree");
+          tree.find('li').has("ul").each(function () {
+              var branch = $(this); //li with children ul
+              branch.prepend("<i class='indicator glyphicon " + closedClass + "'></i>");
+              branch.addClass('branch');
+              branch.on('click', function (e) {
+                  if (this == e.target) {
+                      var icon = $(this).children('i:first');
+                      icon.toggleClass(openedClass + " " + closedClass);
+                      $(this).children().children().toggle();
+                  }
+              })
+              branch.children().children().toggle();
+          });
+          //fire event from the dynamically added icon
+        tree.find('.branch .indicator').each(function(){
+          $(this).on('click', function () {
+              $(this).closest('li').click();
+          });
+        });
+          //fire event to open branch if the li contains an anchor instead of text
+          tree.find('.branch>a').each(function () {
+              $(this).on('click', function (e) {
+                  $(this).closest('li').click();
+                  e.preventDefault();
+              });
+          });
+          //fire event to open branch if the li contains a button instead of text
+          tree.find('.branch>button').each(function () {
+              $(this).on('click', function (e) {
+                  $(this).closest('li').click();
+                  e.preventDefault();
+              });
+          });
+      }
+  });
+  $('#tree1').treed();
+
+$('#tree2').treed({openedClass:'glyphicon-folder-open', closedClass:'glyphicon-folder-close'});
+
+$('#tree3').treed({openedClass:'glyphicon-chevron-right', closedClass:'glyphicon-chevron-down'});
+
+    });
+
+
+
+//Initialization of treeviews
+
+</script>
+
+<script>
+
+
+
+</script>
+
+</html>

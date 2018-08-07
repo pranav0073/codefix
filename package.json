@@ -6,6 +6,8 @@
   },
   "description": "my first socket.io app",
   "dependencies": {
+    "codemirror": "^5.39.2",
+    "ejs": "^2.6.1",
     "express": "^4.15.2",
     "socket.io": "^2.1.1"
   }
