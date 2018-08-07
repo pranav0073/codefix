@@ -8,11 +8,11 @@ var process = require('process');
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+  res.render(__dirname + '/pages/index',{files:[]]});
 });
 
 app.get('/project', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+  res.render(__dirname + '/pages/index',{files:[]]});
 });
 
 app.get('/about', function(req, res){
