@@ -6,12 +6,12 @@ var io = require('socket.io')(http);
 var process = require('process');
 
 app.set('view engine', 'ejs');
-app.use(express.static(__dirname+'/codemirror-5.39.2'));
+app.use(express.static('public'));
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
-app.get('/test', function(req, res){
+app.get('/project', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
@@ -24,24 +24,30 @@ app.get('/about', function(req, res){
 
 });
 
-app.get('/test/*', function(req, res){
+app.get('/project/*', function(req, res){
   //create a folder
 
-  var param = req.url.substring(6, req.url.length);
-  console.log(param);
+  var param = req.url.substring(9, req.url.length);
+  console.log('param value' +param);
   process.umask = 0;
   fs.mkdir(__dirname+`/test-${param}`,0777,(err)=>{
+
     if(err){
+      console.log(err);
       if(err.code === 'EEXIST'){
+        console.log('Folder already exisits')
         fs.readdir(__dirname+`/test-${param}`,(err,files)=>{
-          console.log(err);
-          console.log(files);
+          // console.log(err);
+          // console.log(files);
           res.render(__dirname + '/pages/index',{files:files});
         })
       }
     }
-    else
-    res.sendFile(__dirname + '/index.html');
+    else{
+      console.log('else block');
+      res.render(__dirname + '/pages/index',{files:[]});
+    }
+
   });
 
 });
