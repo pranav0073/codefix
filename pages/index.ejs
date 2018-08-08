@@ -131,7 +131,7 @@
     <div class="">
       <div class="row">
         <div class="col-2">
-          <a class="file nav-link" href="#item-2">trigger.txt</a>
+          <!-- <a class="file nav-link" href="#item-2">trigger.txt</a> -->
           <% files.forEach(function(fileName){ %>
            <a class="file nav-link" href="#item-2"><%= fileName %></a>
         <%  }); %>
@@ -154,7 +154,7 @@
                           <ul>
                               <li>Reports
                                   <ul>
-                                      <li class="file">trigger.txt</li>
+                                      <!-- <li class="file">trigger.txt</li> -->
                                       <li>Report2</li>
                                       <li>Report3</li>
                                   </ul>
@@ -357,7 +357,7 @@
         console.log(xval);
         console.log(xval.target.innerHTML);
         var value = {val : xval.target.innerHTML, loc:loc}
-        socket.emit('chat message', value);
+        socket.emit('file select', value);
         $('#m').val('');
       });
 
@@ -377,6 +377,14 @@
 
 
         });
+        socket.on('file select'+loc, function(msg){
+          //
+          readOnlyCodeMirror.getDoc().setValue(msg);
+          //console.log($('#codesnippet_readonly').html('msg'));
+          //$('#codesnippet_readonly').val('msg') ;
+
+
+          });
 
       $("#up").click(function(){
         alert("The paragraph was clicked.");

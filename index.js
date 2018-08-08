@@ -60,11 +60,21 @@ io.on('connection', function(socket){
     //io.emit('chat message'+msg.loc, msg.val);
   });
 
-  socket.on('chat message', function(msg){
+  socket.on('file select',function(msg){
     console.log(msg);
-
+    console.log(msg.loc);
     console.log(msg.val);
-    console.log(io.listenerCount('chat message'));
+    fs.readFile(`${__dirname}/test-${msg.loc.substring(9, msg.loc.length)}/${msg.val}`,'utf8',(err,data)=>{
+    
+      if(err)
+        console.log(err);
+      io.emit('file select'+msg.loc, data);
+    });
+  });
+
+  socket.on('chat message', function(msg){
+
+    //console.log(io.listenerCount('chat message'));
     if(msg.val==="trigger.txt"){
       console.log('pranav');
       //console.log(`/test-${param}`);
