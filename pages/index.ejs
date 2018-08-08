@@ -18,6 +18,13 @@
     <title>CodeFix</title>
     <style>
 
+    .blockquote {
+      font-size: 12px
+    }
+    .comments{
+      height: 232px;
+      overflow: auto;
+    }
     /* .tree, .tree ul {
         margin:0;
         padding:0;
@@ -237,6 +244,7 @@
               </form>
             </div>
           </div>
+          <div class="comments">
           <% comments.forEach(function(comment){ %>
             <div class="card">
               <div class="card-header">
@@ -272,9 +280,9 @@
           <div class="card">
             <div class="card-body">
               <blockquote class="blockquote mb-0">
-                <textarea name="name" rows="8" id="cid1">
+                <textarea name="name" rows="4" id="cid1">
 
-              </textarea>
+                </textarea>
                 <footer class="blockquote-footer">Pranav <cite title="Source Title">Source Title</cite></footer>
               </blockquote>
             </div>
@@ -288,7 +296,7 @@
 
             </div>
           </div>
-
+        </div>
 
 
           </div>
@@ -319,14 +327,15 @@
       var com =  CodeMirror.fromTextArea(document.getElementById('cid1'),{
         mode: "text/x-java",
 
-        lineWrapping: true,
+        lineWrapping: false,
         theme: "neo",
         gutters: ["CodeMirror-linenumbers", "breakpoints"],
-        scrollbarStyle:null,
+
         lineNumbers: true,
         readOnly: true,
         defaultTextHeight:1
       });
+      com.setSize(null,100);
       com.getDoc().setValue(`public class Response{
         @AuraEnabled
         public Integer noOfPages;
