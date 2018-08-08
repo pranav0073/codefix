@@ -387,9 +387,7 @@
       $("#s_presenter").click(()=>{
 
 
-        presenter = presenter?false:true;
-        var value = {loc:loc}
-        socket.emit("presenter changed",value);
+        presenter = true;
 
       });
       $("#e_presenter").click(()=>{
