@@ -4,6 +4,7 @@ var fs = require('fs');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var process = require('process');
+var Comment = require(__dirname+'/Utils/fetchComments');
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -35,17 +36,28 @@ app.get('/project/*', function(req, res){
     if(err){
       console.log(err);
       if(err.code === 'EEXIST'){
+        var comments = [];
         console.log('Folder already exisits')
-        fs.readdir(__dirname+`/test-${param}`,(err,files)=>{
-          // console.log(err);
-          // console.log(files);
-          res.render(__dirname + '/pages/index',{files:files});
+        Comment.fetchComments({"space_name":param})
+        .then((resolve,reject)=>{
+          fs.readdir(__dirname+`/test-${param}`,(err,files)=>{
+            console.log('print resolve');
+            console.log(resolve.comments);
+            res.render(__dirname + '/pages/index',{files:files,comments:resolve.comments});
+          })
+        }).catch((err)=>{
+          console.log(err);
         })
+
       }
     }
     else{
       console.log('else block');
-      res.render(__dirname + '/pages/index',{files:[]});
+      Comment.addSpace({"space_name":param})
+      .then((resolve,reject)=>{
+        res.render(__dirname + '/pages/index',{files:[],comments:[]});
+      })
+
     }
 
   });
@@ -65,7 +77,7 @@ io.on('connection', function(socket){
     console.log(msg.loc);
     console.log(msg.val);
     fs.readFile(`${__dirname}/test-${msg.loc.substring(9, msg.loc.length)}/${msg.val}`,'utf8',(err,data)=>{
-    
+
       if(err)
         console.log(err);
       io.emit('file select'+msg.loc, data);
