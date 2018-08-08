@@ -83,6 +83,12 @@ io.on('connection', function(socket){
       io.emit('file select'+msg.loc, data);
     });
   });
+  socket.on('scroll event',function(msg){
+
+
+      io.emit('scroll event'+msg.loc, msg);
+  });
+
 
   socket.on('chat message', function(msg){
 

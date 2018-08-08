@@ -311,6 +311,9 @@
   <script>
     $(function () {
 
+      var loc = document.location.pathname;
+      var socket = io();
+
       var selectedLines =[];
       var com =  CodeMirror.fromTextArea(document.getElementById('cid1'),{
         mode: "text/x-java",
@@ -350,6 +353,14 @@
         console.log(data.getSelection())
         $('#c').val(data.getSelection());
       })
+      readOnlyCodeMirror.on("scroll",(editor)=>{
+
+        var scrollInfo = readOnlyCodeMirror.getScrollInfo();
+        console.log(scrollInfo);
+        var value = {scrollInfo:scrollInfo, loc:loc}
+        socket.emit("scroll event",value);
+        //readOnlyCodeMirror.scrollTo(0,0);
+      })
       readOnlyCodeMirror.on("gutterClick", function(cm, n) {
         var info = cm.lineInfo(n);
 
@@ -371,8 +382,7 @@
 
 
 
-      var loc = document.location.pathname;
-      var socket = io();
+
 
       $('.file').click((xval)=>{
         console.log(xval);
@@ -398,6 +408,18 @@
 
 
         });
+
+        socket.on('scroll event'+loc, function(msg){
+          //
+          console.log('event captured');
+          msg= msg.scrollInfo;
+          console.log(msg);
+          readOnlyCodeMirror.scrollTo(msg.left,msg.top);
+          //console.log($('#codesnippet_readonly').html('msg'));
+          //$('#codesnippet_readonly').val('msg') ;
+
+
+          });
         socket.on('file select'+loc, function(msg){
           //
           readOnlyCodeMirror.getDoc().setValue(msg);
