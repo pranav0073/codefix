@@ -83,11 +83,22 @@ io.on('connection', function(socket){
       io.emit('file select'+msg.loc, data);
     });
   });
+
+  socket.on('presenter changed',function(msg){
+
+      console.log('presenter changed');
+      socket.broadcast.emit('presenter changed'+msg.loc, {flag:false});
+
+  });
+
   socket.on('scroll event',function(msg){
 
 
       io.emit('scroll event'+msg.loc, msg);
   });
+
+
+
 
 
   socket.on('chat message', function(msg){

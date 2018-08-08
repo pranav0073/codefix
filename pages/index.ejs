@@ -116,10 +116,10 @@
           <a class="nav-link active" href="#">Archives</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Disbaled</a>
+          <button type="button" class="btn btn btn-success" id="s_presenter" href="#">Start Presenting</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Disabled</a>
+          <button type="button" class="btn btn btn-danger" id="e_presenter" href="#">Stop Presenting</a>
         </li>
         <li class="nav-item">
           <a class="nav-link disabled" href="#">Disabled</a>
@@ -311,6 +311,7 @@
   <script>
     $(function () {
 
+      var presenter = false;
       var loc = document.location.pathname;
       var socket = io();
 
@@ -355,10 +356,13 @@
       })
       readOnlyCodeMirror.on("scroll",(editor)=>{
 
-        var scrollInfo = readOnlyCodeMirror.getScrollInfo();
-        console.log(scrollInfo);
-        var value = {scrollInfo:scrollInfo, loc:loc}
-        socket.emit("scroll event",value);
+        if(presenter){
+          var scrollInfo = readOnlyCodeMirror.getScrollInfo();
+          console.log(scrollInfo);
+          var value = {scrollInfo:scrollInfo, loc:loc}
+          socket.emit("scroll event",value);
+        }
+
         //readOnlyCodeMirror.scrollTo(0,0);
       })
       readOnlyCodeMirror.on("gutterClick", function(cm, n) {
@@ -379,6 +383,26 @@
         return marker;
       }
 
+
+      $("#s_presenter").click(()=>{
+
+
+        presenter = presenter?false:true;
+        var value = {loc:loc}
+        socket.emit("presenter changed",value);
+
+      });
+      $("#e_presenter").click(()=>{
+
+
+        presenter = false;
+
+      });
+
+      socket.on("presenter changed"+loc,(value)=>{
+        console.log('notified');
+        presenter = false;
+      })
 
 
 
@@ -401,7 +425,7 @@
         return false;
       });
       socket.on('chat message'+loc, function(msg){
-        //
+
         readOnlyCodeMirror.getDoc().setValue(msg);
         //console.log($('#codesnippet_readonly').html('msg'));
         //$('#codesnippet_readonly').val('msg') ;
@@ -410,13 +434,13 @@
         });
 
         socket.on('scroll event'+loc, function(msg){
-          //
-          console.log('event captured');
-          msg= msg.scrollInfo;
-          console.log(msg);
-          readOnlyCodeMirror.scrollTo(msg.left,msg.top);
-          //console.log($('#codesnippet_readonly').html('msg'));
-          //$('#codesnippet_readonly').val('msg') ;
+
+          if(!presenter){
+            console.log('event captured');
+            msg= msg.scrollInfo;
+            console.log(msg);
+            readOnlyCodeMirror.scrollTo(msg.left,msg.top);
+          }
 
 
           });
