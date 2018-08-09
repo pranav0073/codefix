@@ -1,335 +1,113 @@
-<!doctype html>
-<html>
-  <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <title>CodeFix</title>
-    <style>
+<!DOCTYPE html>
+<html lang="en">
 
-    .tree, .tree ul {
-  margin:0;
-  padding:0;
-  list-style:none
-}
-.tree ul {
-  margin-left:1em;
-  position:relative
-}
-.tree ul ul {
-  margin-left:.5em
-}
-.tree ul:before {
-  content:"";
-  display:block;
-  width:0;
-  position:absolute;
-  top:0;
-  bottom:0;
-  left:0;
-  border-left:1px solid
-}
-.tree li {
-  margin:0;
-  padding:0 1em;
-  line-height:2em;
-  color:#369;
-  font-weight:700;
-  position:relative
-}
-.tree ul li:before {
-  content:"";
-  display:block;
-  width:10px;
-  height:0;
-  border-top:1px solid;
-  margin-top:-1px;
-  position:absolute;
-  top:1em;
-  left:0
-}
-.tree ul li:last-child:before {
-  background:#fff;
-  height:auto;
-  top:1em;
-  bottom:0
-}
-.indicator {
-  margin-right:5px;
-}
-.tree li a {
-  text-decoration: none;
-  color:#369;
-}
-.tree li button, .tree li button:active, .tree li button:focus {
-  text-decoration: none;
-  color:#369;
-  border:none;
-  background:transparent;
-  margin:0px 0px 0px 0px;
-  padding:0px 0px 0px 0px;
-  outline: 0;
-}
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      .code{
-        background-color: #f7f7f7;
-        height: 700px;
-        overflow: scroll;
-      }
-      body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-      pre {
-        color:black;
-    white-space: pre-wrap;       /* Since CSS 2.1 */
-    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-    white-space: -pre-wrap;      /* Opera 4-6 */
-    white-space: -o-pre-wrap;    /* Opera 7 */
-    word-wrap: break-word;       /* Internet Explorer 5.5+ */
-}
-    </style>
-  </head>
-  <body>
+    <head>
 
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Code Fix</title>
 
-    <div class="">
-      <div class="row">
-        <div class="col-2">
-          <a class="file nav-link" href="#item-2">trigger.txt</a>
+        <!-- CSS -->
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+        <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="/assets/css/form-elements.css">
+        <link rel="stylesheet" href="/assets/css/style.css">
 
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
 
+        <!-- Favicon and touch icons -->
+        <link rel="shortcut icon" href="assets/ico/favicon.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
 
+    </head>
 
+    <body>
 
-
-          <ul id="tree1">
-
-
-                  <!-- <br /> <code>$('#tree1').treed();</code> -->
-
-              </p>
-              <li><a href="#">TECH</a>
-
-                  <ul>
-                      <li>Company Maintenance</li>
-                      <li>Employees
-                          <ul>
-                              <li>Reports
-                                  <ul>
-                                      <li class="file">trigger.txt</li>
-                                      <li>Report2</li>
-                                      <li>Report3</li>
-                                  </ul>
-                              </li>
-                              <li>Employee Maint.</li>
-                          </ul>
-                      </li>
-                      <li>Human Resources</li>
-                  </ul>
-              </li>
-              <li>XRP
-                  <ul>
-                      <li>Company Maintenance</li>
-                      <li>Employees
-                          <ul>
-                              <li>Reports
-                                  <ul>
-                                      <li>Report1</li>
-                                      <li>Report2</li>
-                                      <li>Report3</li>
-                                  </ul>
-                              </li>
-                              <li>Employee Maint.</li>
-                          </ul>
-                      </li>
-                      <li>Human Resources</li>
-                  </ul>
-              </li>
-          </ul>
-
-
-
-
-
-
-
-
-
-
+        <!-- Top content -->
+        <div class="top-content">
+        	
+            <div class="inner-bg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 text">
+                            <h1><strong>CodeFix</strong></h1>
+                            <div class="description">
+                            	<p>
+                                A collaborative code review tool.
+                            	</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3 form-box">
+                        	
+                            <div class="form-bottom">
+			                    
+			                    	<div class="form-group">
+			                    		<label class="sr-only" >Username</label>
+			                        	<input id = "username" type="text"  placeholder="Username..." class="form-username form-control" >
+			                        </div>
+			                        <div class="form-group">
+			                        	<label class="sr-only" >Space number</label>
+			                        	<input id = "space" type="text"  placeholder="Space Number..." class="form-username form-control" >
+			                        </div>
+			                        <button id="btn" class="btn">Enter the space</button>
+		                    </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
         </div>
-        <div class="col-7 code" data-spy="scroll">
-          <pre id="messages"></pre>
-        </div>
-        <div class="col-3">
-          <div class="card">
-            <div class="card-header">
-              Comments
-            </div>
-            <div>
-            <div class="card-body">
-              <blockquote class="blockquote mb-0">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                <footer class="blockquote-footer">Sachin <cite title="Source Title">Source Title</cite></footer>
-              </blockquote>
-            </div>
-            <div class="card-body">
-              <blockquote class="blockquote mb-0">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                <footer class="blockquote-footer">Pranav <cite title="Source Title">Source Title</cite></footer>
-              </blockquote>
-            </div>
-            <div class="card-body">
-              <blockquote class="blockquote mb-0">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                <footer class="blockquote-footer">Hemant <cite title="Source Title">Source Title</cite></footer>
-              </blockquote>
 
-            </div>
-
-          </div>
-          </div>
-          <form>
-          <input id="ssd" autocomplete="off" /><button>Send</button>
-        </form>
-        </div>
-      </div>
-    </div>
+        <!-- Javascript -->
+        <script src="/assets/js/jquery-1.11.1.min.js"></script>
+        <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/assets/js/jquery.backstretch.min.js"></script>
+        <script src="/assets/js/scripts.js"></script>
 
 
+        <script >
+        
 
-    <form action="">
+            $(function () {
+                //window.location.href +='project/'+$('#space').val();
+                // $('form').submit(function(){
+                //     console.log('submit');
+                //     console.log($('#username').val());
+                //     console.log($('#space').val());
+                //     localStorage.setItem('codefix_user', $('#username').val());
+                //     $('form').attr('action', '/project/'+$('#space').val());
 
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
-  </body>
+                // });
+                $('#btn').click(function(){
+                   
+                    localStorage.setItem('codefix_user', $('#username').val());
+                    var url=window.location.href+'project/'+$('#space').val()
+                    window.location.href = url;
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-  <script>
-    $(function () {
-      var loc = document.location.pathname;
-      var socket = io();
+                });
 
-      $('.file').click((xval)=>{
-        console.log(xval);
-        console.log(xval.target.innerHTML);
-        var value = {val : xval.target.innerHTML, loc:loc}
-        socket.emit('chat message', value);
-        $('#m').val('');
-      });
+            });
 
-      $('form').submit(function(){
+        </script>
 
+        
+        <!--[if lt IE 10]>
+            <script src="assets/js/placeholder.js"></script>
+        <![endif]-->
 
-        var value = {val : $('#m').val(), loc:loc}
-        socket.emit('chat message', value);
-        $('#m').val('');
-        return false;
-      });
-      socket.on('chat message'+loc, function(msg){
-        //alert('x');
-        $('#messages').text(msg);//($('<li>').text(msg));
-
-        });
-
-      $("#up").click(function(){
-        alert("The paragraph was clicked.");
-        action();
-      });
-
-    var action =   function(){
-
-        var fileToLoad = document.getElementById("fileToLoad").files[0];
-
-        var fileReader = new FileReader();
-        alert("someting");
-        console.log(fileReader);
-        fileReader.addEventListener('load', function() {
-          alert("someting new");
-            var res = reader.result;
-            console.log(res);
-        });
-        fileReader.onload = function(fileLoadedEvent){
-          alert("someting new");
-            var textFromFileLoaded = fileLoadedEvent.target.result;
-            console.log(textFromFileLoaded);
-            socket.emit('chat message', textFromFileLoaded);
-          //  document.getElementById("inputTextToSave").value = textFromFileLoaded;
-        };
-
-
-      }
-
-      $.fn.extend({
-      treed: function (o) {
-
-        var openedClass = 'glyphicon-minus-sign';
-        var closedClass = 'glyphicon-plus-sign';
-
-        if (typeof o != 'undefined'){
-          if (typeof o.openedClass != 'undefined'){
-          openedClass = o.openedClass;
-          }
-          if (typeof o.closedClass != 'undefined'){
-          closedClass = o.closedClass;
-          }
-        };
-
-          //initialize each of the top levels
-          var tree = $(this);
-          tree.addClass("tree");
-          tree.find('li').has("ul").each(function () {
-              var branch = $(this); //li with children ul
-              branch.prepend("<i class='indicator glyphicon " + closedClass + "'></i>");
-              branch.addClass('branch');
-              branch.on('click', function (e) {
-                  if (this == e.target) {
-                      var icon = $(this).children('i:first');
-                      icon.toggleClass(openedClass + " " + closedClass);
-                      $(this).children().children().toggle();
-                  }
-              })
-              branch.children().children().toggle();
-          });
-          //fire event from the dynamically added icon
-        tree.find('.branch .indicator').each(function(){
-          $(this).on('click', function () {
-              $(this).closest('li').click();
-          });
-        });
-          //fire event to open branch if the li contains an anchor instead of text
-          tree.find('.branch>a').each(function () {
-              $(this).on('click', function (e) {
-                  $(this).closest('li').click();
-                  e.preventDefault();
-              });
-          });
-          //fire event to open branch if the li contains a button instead of text
-          tree.find('.branch>button').each(function () {
-              $(this).on('click', function (e) {
-                  $(this).closest('li').click();
-                  e.preventDefault();
-              });
-          });
-      }
-  });
-  $('#tree1').treed();
-
-$('#tree2').treed({openedClass:'glyphicon-folder-open', closedClass:'glyphicon-folder-close'});
-
-$('#tree3').treed({openedClass:'glyphicon-chevron-right', closedClass:'glyphicon-chevron-down'});
-
-    });
-
-
-
-//Initialization of treeviews
-
-</script>
-
+    </body>
 
 </html>

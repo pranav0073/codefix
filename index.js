@@ -12,12 +12,12 @@ var Comment = require(__dirname+'/Utils/fetchComments');
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
-app.get('/', function(req, res){
-  res.render(__dirname + '/pages/index',{files:[],comments:[]});
+app.get('/', function(req, res){  
+  res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/project', function(req, res){
-  res.render(__dirname + '/pages/index',{files:[],comments:[]});
+  res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/about', function(req, res){
@@ -105,6 +105,9 @@ console.log('in upload');
   
 
 });
+// app.all(function(req,res)=>{
+//   res.sendFile(__dirname + '/index.html');
+// })
 
 io.on('connection', function(socket){
   //console.log(socket.handshake.);
