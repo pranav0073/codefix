@@ -21,6 +21,20 @@
     <title>CodeFix</title>
     <style>
 
+    .blockquote {
+      font-size: 12px
+    }
+    .comments{
+      height: 300px;
+      overflow: auto;
+    }
+    .inputForm{
+      background-color: #d7e6ef;
+    }
+    .card-header:first-child {
+      background-color: #ffe8e8;
+    }
+
     /* .tree, .tree ul {
         margin:0;
         padding:0;
@@ -119,10 +133,10 @@
           <a class="nav-link active" href="#">Archives</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Disbaled</a>
+          <button type="button" class="btn btn btn-success" id="s_presenter" href="#">Start Presenting</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Disabled</a>
+          <button type="button" class="btn btn btn-danger" id="e_presenter" href="#">Stop Presenting</a>
         </li>
         <li class="nav-item">
           <a class="nav-link disabled" href="#">Disabled</a>
@@ -138,6 +152,9 @@
           <% files.forEach(function(fileName){ %>
            <a class="file nav-link" href="#item-2"><%= fileName %></a>
         <%  }); %>
+
+
+
 
 
 
@@ -285,29 +302,31 @@ console.log('called');
 
         <div class="col-3">
           <div class="card">
-            <div class="card-body">
-              <form action="">
 
-                <div class="form-group">
-                  <label for="l">Line Number</label>
-                  <input type="text" class="form-control" id="l" aria-describedby="emailHelp" placeholder="enter line">
-                  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                </div>
-                <div class="form-group">
-                  <label for="c">Code Line</label>
-                  <textarea  class="form-control" id="c" placeholder="Code" rows="5"></textarea>
-                </div>
 
-                <textarea class="form-control" id="m" rows="3"></textarea>
-
-                <button class="btn btn-primary">Add Comment</button>
-              </form>
+            <div class="card-header">
+              Review Comments
             </div>
           </div>
-          <div class="card">
-            <div class="card-header">
-              Comments
+          <div class="comments" id="review_comments">
+          <% comments.forEach(function(comment){ %>
+            <div class="card">
+
+
+              <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                  <footer class="blockquote-footer"><%= comment.user_name %><cite title="Source Title" class="float-right">trigger.txt</cite></footer>
+
+
+                </blockquote>
+              </div>
             </div>
+
+
+          <%  }); %>
+          <div class="card">
+
 
             <div class="card-body">
               <blockquote class="blockquote mb-0">
@@ -321,9 +340,9 @@ console.log('called');
           <div class="card">
             <div class="card-body">
               <blockquote class="blockquote mb-0">
-                <textarea name="name" rows="8" id="cid1">
+                <textarea name="name" rows="4" id="cid1">
 
-              </textarea>
+                </textarea>
                 <footer class="blockquote-footer">Pranav <cite title="Source Title">Source Title</cite></footer>
               </blockquote>
             </div>
@@ -332,13 +351,33 @@ console.log('called');
             <div class="card-body">
               <blockquote class="blockquote mb-0">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                <footer class="blockquote-footer">Hemant <cite title="Source Title">Source Title</cite></footer>
+                <footer class="blockquote-footer">Hemant <cite title="Source Title" class="float-right">Source Title</cite></footer>
               </blockquote>
 
             </div>
           </div>
+        </div>
+        <div class="card inputForm">
+          <div class="card-body">
+            <form action="">
 
+              <div class="form-group">
 
+                <input type="text" class="form-control" id="l" aria-describedby="emailHelp" placeholder="Enter line">
+                <!-- <small id="emailHelp" class="form-text text-muted">Line Number</small> -->
+              </div>
+              <div class="form-group">
+
+                <textarea  class="form-control" id="c" placeholder="Code Snippet" rows="3 "></textarea>
+                <!-- <small id="emailHelp" class="form-text text-muted">Line Number</small> -->
+              </div>
+
+              <textarea class="form-control" id="m" rows="3" placeholder="write your comment here"></textarea>
+
+              <button class="btn btn-primary btn-sm float-right">Add Comment</button>
+            </form>
+          </div>
+        </div>
 
           </div>
 
@@ -357,21 +396,40 @@ console.log('called');
   <script src="http://codemirror.net/mode/javascript/javascript.js"></script> -->
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script src='https://cdn.rawgit.com/admsev/jquery-play-sound/master/jquery.playSound.js'></script>
   <script>
     $(function () {
 
+      var presenter = false;
+      var loc = document.location.pathname;
+      var socket = io();
+
       var selectedLines =[];
-      var com =  CodeMirror.fromTextArea(document.getElementById('cid1'),{
+      var inputForm = CodeMirror.fromTextArea(document.getElementById('c'),{
         mode: "text/x-java",
 
-        lineWrapping: true,
+        lineWrapping: false,
         theme: "neo",
         gutters: ["CodeMirror-linenumbers", "breakpoints"],
-        scrollbarStyle:null,
+
         lineNumbers: true,
         readOnly: true,
         defaultTextHeight:1
       });
+      inputForm.setSize(null,100);
+
+      var com =  CodeMirror.fromTextArea(document.getElementById('cid1'),{
+        mode: "text/x-java",
+
+        lineWrapping: false,
+        theme: "neo",
+        gutters: ["CodeMirror-linenumbers", "breakpoints"],
+
+        lineNumbers: true,
+        readOnly: true,
+        defaultTextHeight:1
+      });
+      com.setSize(null,100);
       com.getDoc().setValue(`public class Response{
         @AuraEnabled
         public Integer noOfPages;
@@ -393,17 +451,29 @@ console.log('called');
           lineNumbers: true,
           readOnly: true
       });
-      readOnlyCodeMirror.setSize(null,600);
+      readOnlyCodeMirror.setSize(null,585);
       readOnlyCodeMirror.on("copy",(data)=>{
         console.log(data);
         console.log(data.getSelection())
-        $('#c').val(data.getSelection());
+        inputForm.getDoc().setValue(data.getSelection());
+        //$('#c').val(data.getSelection());
+      })
+      readOnlyCodeMirror.on("scroll",(editor)=>{
+
+        if(presenter){
+          var scrollInfo = readOnlyCodeMirror.getScrollInfo();
+          console.log(scrollInfo);
+          var value = {scrollInfo:scrollInfo, loc:loc}
+          socket.emit("scroll event",value);
+        }
+
+        //readOnlyCodeMirror.scrollTo(0,0);
       })
       readOnlyCodeMirror.on("gutterClick", function(cm, n) {
         var info = cm.lineInfo(n);
 
         $('#l').val(info.line+1);
-        $('#c').val(info.text);
+        inputForm.getDoc().setValue(info.text);
         console.log(info);
         cm.setGutterMarker(n, "breakpoints", info.gutterMarkers ? null : makeMarker());
 
@@ -418,10 +488,29 @@ console.log('called');
       }
 
 
+      $("#s_presenter").click(()=>{
 
 
-      var loc = document.location.pathname;
-      var socket = io();
+        presenter = presenter?false:true;
+        var value = {loc:loc}
+        socket.emit("presenter changed",value);
+
+      });
+      $("#e_presenter").click(()=>{
+
+
+        presenter = false;
+
+      });
+
+      socket.on("presenter changed"+loc,(value)=>{
+        console.log('notified');
+        presenter = false;
+      })
+
+
+
+
 
       $('.file').click((xval)=>{
         console.log(xval);
@@ -436,17 +525,44 @@ console.log('called');
 
         var value = {val : $('#m').val(), loc:loc}
         socket.emit('chat message', value);
+
+        $('#review_comments').prepend(`<div class="card">
+
+
+          <div class="card-body">
+            <blockquote class="blockquote mb-0">
+              <p>${$('#m').val()}</p>
+              <footer class="blockquote-footer">Pranav<cite title="Source Title" class="float-right">trigger.txt</cite></footer>
+
+
+            </blockquote>
+          </div>
+        </div>`)
+        $.playSound('/notify.mp3');
+        $('#review_comments').animate({ scrollTop: 0 }, "slow");
         $('#m').val('');
         return false;
       });
       socket.on('chat message'+loc, function(msg){
-        //
+
         readOnlyCodeMirror.getDoc().setValue(msg);
         //console.log($('#codesnippet_readonly').html('msg'));
         //$('#codesnippet_readonly').val('msg') ;
 
 
         });
+
+        socket.on('scroll event'+loc, function(msg){
+
+          if(!presenter){
+            console.log('event captured');
+            msg= msg.scrollInfo;
+            console.log(msg);
+            readOnlyCodeMirror.scrollTo(msg.left,msg.top);
+          }
+
+
+          });
         socket.on('file select'+loc, function(msg){
           //
           readOnlyCodeMirror.getDoc().setValue(msg);
