@@ -147,9 +147,11 @@
       <div class="row">
         <div class="col-2">
           <!-- <a class="file nav-link" href="#item-2">trigger.txt</a> -->
-          <% files.forEach(function(fileName){ %>
-           <a class="file nav-link" href="#item-2"><%= fileName %></a>
-        <%  }); %>
+          <div id="fileList">
+            <% files.forEach(function(fileName){ %>
+               <a class="file nav-link" href="#item-2"><%= fileName %></a>
+            <%  }); %>
+          </div>
 
 
 
@@ -450,7 +452,7 @@
 
 
 
-      $('.file').click((xval)=>{
+      $('#fileList').click((xval)=>{
         console.log(xval);
         console.log(xval.target.innerHTML);
         var value = {val : xval.target.innerHTML, loc:loc}
@@ -514,6 +516,13 @@
         //console.log($('#codesnippet_readonly').html('msg'));
         //$('#codesnippet_readonly').val('msg') ;
 
+
+        });
+
+      socket.on('file uploaded'+loc, function(msg){
+        console.log('file name'+msg.fileName);
+        $( "#fileList" ).append( $( "<a class='file nav-link' href='#item-2'>"+msg.fileName+"</a> " ));
+        
 
         });
 
@@ -662,6 +671,9 @@ var files = $(this).get(0).files;
     contentType: false,
     success: function(data){
         console.log('upload successful!\n' + data);
+        
+          var value = {fileName:file.name, loc:loc}
+          socket.emit("file uploaded",value);
     },
     xhr: function() {
       // create an XMLHttpRequest

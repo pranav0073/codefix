@@ -74,10 +74,16 @@ console.log('in upload');
   // create an incoming form object
   var form = new formidable.IncomingForm();
 
+  var  locl =form.parse(req);
+  console.log(locl.headers.referer);
+  console.log(locl.headers.origin);
+  var spaceNo = locl.headers.referer.substring(locl.headers.origin.length+9,locl.headers.referer.length);
+  console.log(spaceNo);
+
   // specify that we want to allow the user to upload multiple files in a single request
   form.multiples = true;
   // store all uploads in the /uploads directory
-  form.uploadDir = __dirname+ '/test-pro';
+  form.uploadDir = __dirname+ '/test-'+spaceNo;
 
   // every time a file has been uploaded successfully,
   // rename it to it's orignal name
@@ -96,7 +102,7 @@ console.log('in upload');
   });
 
   // parse the incoming request containing the form data
-  form.parse(req);
+  
 
 });
 
@@ -133,7 +139,11 @@ io.on('connection', function(socket){
 
       io.emit('scroll event'+msg.loc, msg);
   });
+  socket.on('file uploaded',function(msg){
 
+
+      io.emit('file uploaded'+msg.loc, msg);
+  });
 
   socket.on('review comment',function(msg){
     socket.broadcast.emit('review comment'+msg.loc,msg.val);
@@ -180,6 +190,7 @@ io.on('connection', function(socket){
   });
 });
 
-http.listen(process.env.PORT || 3000, function(){
+http.listen(5000 || process.env.PORT || 3000, function(){
+  console.log(process.env.PORT)
   console.log('listening on *:3000');
 });
