@@ -13,8 +13,7 @@ fetchComments = function(params){
         if(err)
           reject(err);
         if(result){
-          console.log('resilt display');
-          console.log(result);
+
           resolve(result);
         }else{
           dbo.collection("spaces").insertOne({"space_name":params.space_name, comments:[]});
@@ -26,6 +25,40 @@ fetchComments = function(params){
 
     });
   })
+}
+
+/*
+
+var comm = {
+    user_name: rc.user_name,
+    line_number: rc.line_number,
+    user_comment: rc.user_comment
+};
+
+var payLoad = {
+  rc:comm,
+  space_name:msg.loc.substring(9, msg.loc.length)
+}
+*/
+
+addComment = function(params){
+
+  console.log('inside add commnet db')
+  return new Promise((resolve,reject)=>{
+    MongoClient.connect(url, function(err, db) {
+      if (err) throw err;
+      var dbo = db.db("codefix");
+      console.log(params.space_name);
+      dbo.collection("spaces").update({"space_name":params.space_name},{$push:{comments:{
+            "user_name": params.rc.user_name, 
+            "line_number": params.rc.line_number,
+            "user_comment": params.rc.user_comment
+
+        }}},(err)=>{
+          console.log(err);
+        });
+    })
+  });
 }
 
 addSpace = function(params){
@@ -47,5 +80,6 @@ addSpace = function(params){
 
 module.exports = {
   addSpace: addSpace,
-  fetchComments : fetchComments
+  fetchComments : fetchComments,
+  addComment: addComment
 }

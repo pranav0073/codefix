@@ -47,7 +47,7 @@ app.get('/project/*', function(req, res){
           fs.readdir(__dirname+`/test-${param}`,(err,files)=>{
             console.log('print resolve');
             console.log(resolve.comments);
-            res.render(__dirname + '/pages/index',{files:files,comments:resolve.comments});
+            res.render(__dirname + '/pages/index',{files:files,comments:resolve.comments.reverse()});
           })
         }).catch((err)=>{
           console.log(err);
@@ -134,6 +134,27 @@ io.on('connection', function(socket){
   });
 
 
+  socket.on('review comment',function(msg){
+    socket.broadcast.emit('review comment'+msg.loc,msg.val);
+    var rc = msg.val;
+    //construct ur commnet
+
+    // "user_name": params.user_name | 'pranav',
+    // "line_number": params.line_number | 2,
+    // "user_comment": params.user_comment | "this code needs commenting",
+
+    var comm = {
+        user_name: rc.user_name,
+        line_number: rc.line_number,
+        user_comment: rc.user_comment
+    };
+
+    var payLoad = {
+      rc:comm,
+      space_name:msg.loc.substring(9, msg.loc.length)
+    }
+    Comment.addComment(payLoad);
+  });
 
 
 
