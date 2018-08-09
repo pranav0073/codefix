@@ -102,7 +102,7 @@ console.log('in upload');
   });
 
   // parse the incoming request containing the form data
-  
+
 
 });
 
@@ -153,7 +153,7 @@ io.on('connection', function(socket){
     // "user_name": params.user_name | 'pranav',
     // "line_number": params.line_number | 2,
     // "user_comment": params.user_comment | "this code needs commenting",
-    
+
     var comm = {
         user_name: rc.user_name,
         line_number: rc.line_number,
@@ -190,7 +190,7 @@ io.on('connection', function(socket){
   });
 });
 
-http.listen(5000 || process.env.PORT || 3000, function(){
+http.listen(process.env.PORT || 5000 || 3000, function(){
   console.log(process.env.PORT)
   console.log('listening on *:3000');
 });
