@@ -219,7 +219,7 @@
           <!-- <pre id="messages"></pre> -->
           <div class="card">
               <div class="card-header">
-                CODE BLOG
+                CODE BLOG <span class="float-right" id="currentFileName"></span>
               </div>
               <div class="card-body">
                 <textarea  id="codesnippet_readonly" name="codesnippet_readonly">
@@ -248,7 +248,7 @@
               <div class="card-body">
                 <blockquote class="blockquote mb-0">
                   <p><%= comment.user_comment %></p>
-                  <footer class="blockquote-footer"><%= comment.user_name %><cite title="Source Title" class="float-right">trigger.txt</cite></footer>
+                  <footer class="blockquote-footer"><%= comment.user_name %><cite title="Source Title" class="float-right"><%= comment.file_name %></cite></footer>
 
 
                 </blockquote>
@@ -335,6 +335,7 @@
       var presenter = false;
       var loc = document.location.pathname;
       var socket = io();
+      var currentFileName = '';
 
       var selectedLines =[];
       var inputForm = CodeMirror.fromTextArea(document.getElementById('c'),{
@@ -461,7 +462,7 @@
 
       //  alert(rc.user_comment);
         var rc = {
-          file_name:"trigger.txt",//take the value from the value assigned in the variable
+          file_name:currentFileName,//take the value from the value assigned in the variable
           user_comment:$('#m').val(),
           line_number:$('#l').val(),
           user_name:"pranav"
@@ -537,6 +538,11 @@
 
 
           });
+
+          socket.on('current file'+loc,function(fileName){
+            $("#currentFileName").text(fileName);
+            currentFileName = fileName;
+          })
 
       $("#up").click(function(){
         alert("The paragraph was clicked.");

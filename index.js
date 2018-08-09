@@ -116,6 +116,7 @@ io.on('connection', function(socket){
 
       if(err)
         console.log(err);
+      io.emit('current file'+msg.loc,msg.val);
       io.emit('file select'+msg.loc, data);
     });
   });
@@ -142,11 +143,12 @@ io.on('connection', function(socket){
     // "user_name": params.user_name | 'pranav',
     // "line_number": params.line_number | 2,
     // "user_comment": params.user_comment | "this code needs commenting",
-
+    
     var comm = {
         user_name: rc.user_name,
         line_number: rc.line_number,
-        user_comment: rc.user_comment
+        user_comment: rc.user_comment,
+        file_name: rc.file_name
     };
 
     var payLoad = {
