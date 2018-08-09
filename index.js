@@ -102,7 +102,7 @@ console.log('in upload');
   });
 
   // parse the incoming request containing the form data
-  
+
 
 });
 // app.all(function(req,res)=>{
@@ -110,11 +110,21 @@ console.log('in upload');
 // })
 
 io.on('connection', function(socket){
-  //console.log(socket.handshake.);
+
+  socket.on('disconnect',function(data,test){
+
+      console.log(test);
+      console.log('disconnection')
+      console.log(data);
+  });
   socket.on('chat message', function(msg){
 
     console.log(io.listenerCount('chat message'));
     //io.emit('chat message'+msg.loc, msg.val);
+  });
+
+  socket.on('new connection',function(msg){
+    socket.broadcast.emit('add user'+msg.loc,msg.current_user);
   });
 
   socket.on('file select',function(msg){
@@ -137,6 +147,14 @@ io.on('connection', function(socket){
 
   });
 
+  socket.on('activate presenter',function(msg){
+    socket.broadcast.emit("activate presenter"+msg.loc,msg.presenter_name);
+  });
+  socket.on('deactivate presenter',function(msg){
+    socket.broadcast.emit("deactivate presenter"+msg.loc,msg.presenter_name);
+  });
+
+
   socket.on('scroll event',function(msg){
 
 
@@ -156,8 +174,9 @@ io.on('connection', function(socket){
     // "user_name": params.user_name | 'pranav',
     // "line_number": params.line_number | 2,
     // "user_comment": params.user_comment | "this code needs commenting",
-    
+
     var comm = {
+        user_code : rc.user_code,
         user_name: rc.user_name,
         line_number: rc.line_number,
         user_comment: rc.user_comment,
@@ -193,7 +212,7 @@ io.on('connection', function(socket){
   });
 });
 
-http.listen(5000 || process.env.PORT || 3000, function(){
+http.listen(process.env.PORT || 5000 || 3000, function(){
   console.log(process.env.PORT)
   console.log('listening on *:3000');
 });
