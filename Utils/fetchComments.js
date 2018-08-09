@@ -50,6 +50,7 @@ addComment = function(params){
       var dbo = db.db("codefix");
       console.log(params.space_name);
       dbo.collection("spaces").update({"space_name":params.space_name},{$push:{comments:{
+            "user_code": params.rc.user_code,
             "user_name": params.rc.user_name,
             "line_number": params.rc.line_number,
             "user_comment": params.rc.user_comment,

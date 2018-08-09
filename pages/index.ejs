@@ -32,6 +32,9 @@
     .card-header:first-child {
       background-color: #ffe8e8;
     }
+    #presenter_message{
+      color:red
+    }
 
     /* .tree, .tree ul {
         margin:0;
@@ -127,17 +130,16 @@
           <img src="https://cdn.dribbble.com/users/1086247/screenshots/3542599/cfmonogram2.png" width="40" height="40" alt="">
         </a>
 
-        <li class="nav-item">
-          <a class="nav-link active" href="#">Archives</a>
-        </li>
+
         <li class="nav-item">
           <button type="button" class="btn btn btn-success" id="s_presenter" href="#">Start Presenting</a>
         </li>
         <li class="nav-item">
           <button type="button" class="btn btn btn-danger" id="e_presenter" href="#">Stop Presenting</a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
+          <a  id="presenter_message" class="nav-link active float right" href="#"></a>
         </li>
 
       </ul>
@@ -146,74 +148,26 @@
     <div class="">
       <div class="row">
         <div class="col-2">
+
           <!-- <a class="file nav-link" href="#item-2">trigger.txt</a> -->
+          <div>
+            <div>
+              <div class="card">
+                <div class="card-header">
+                  Files
+                </div>
+              </div>
+
+            </div>
           <div id="fileList">
             <% files.forEach(function(fileName){ %>
-               <a class="file nav-link" href="#item-2"><%= fileName %></a>
+               <li><a class="file " href="#item-2"><%= fileName %></a></li>
             <%  }); %>
           </div>
-
-
-
-
-
-
-
-
-          <ul id="tree1">
-
-
-                  <!-- <br /> <code>$('#tree1').treed();</code> -->
-
-              </p>
-              <li><a href="#">TECH</a>
-
-                  <ul>
-                      <li>Company Maintenance</li>
-                      <li>Employees
-                          <ul>
-                              <li>Reports
-                                  <ul>
-                                      <!-- <li class="file">trigger.txt</li> -->
-                                      <li>Report2</li>
-                                      <li>Report3</li>
-                                  </ul>
-                              </li>
-                              <li>Employee Maint.</li>
-                          </ul>
-                      </li>
-                      <li>Human Resources</li>
-                  </ul>
-              </li>
-              <li>XRP
-                  <ul>
-                      <li>Company Maintenance</li>
-                      <li>Employees
-                          <ul>
-                              <li>Reports
-                                  <ul>
-                                      <li>Report1</li>
-                                      <li>Report2</li>
-                                      <li>Report3</li>
-                                  </ul>
-                              </li>
-                              <li>Employee Maint.</li>
-                          </ul>
-                      </li>
-                      <li>Human Resources</li>
-                  </ul>
-              </li>
-          </ul>
-
-
-
-
-
-
-
-
           <input id="upload-input" type="file" name="uploads[]" multiple="multiple"></br>
           <button id ="upload-btn" class="btn btn-primary">Upload</button>
+        </div>
+
 
         </div>
         <div class="col-7 code" data-spy="scroll">
@@ -334,6 +288,8 @@
   <script>
     $(function () {
 
+      var  current_user = localStorage.getItem('codefix_user') || "anonymous";
+
       var presenter = false;
       var loc = document.location.pathname;
       var socket = io();
@@ -348,10 +304,11 @@
         gutters: ["CodeMirror-linenumbers", "breakpoints"],
 
         lineNumbers: true,
-        readOnly: true,
+        readOnly: false,
         defaultTextHeight:1
       });
       inputForm.setSize(null,100);
+
 
       var com =  CodeMirror.fromTextArea(document.getElementById('cid1'),{
         mode: "text/x-java",
@@ -427,13 +384,30 @@
 
 
         presenter = presenter?false:true;
+        if(presenter){
+          socket.emit("activate presenter",{loc:loc,presenter_name:current_user});
+          $('#presenter_message').text(`● ${current_user} is currently presenting` );
+
+        }else{
+          socket.emit("deactivate presenter",{loc:loc,presenter_name:current_user});
+          $('#presenter_message').text('');
+        }
+
         var value = {loc:loc}
         socket.emit("presenter changed",value);
 
       });
+
+      socket.on("activate presenter"+loc,(current_user)=>{
+        $('#presenter_message').text(`● ${current_user} is currently presenting` );
+
+      })
+      socket.on("deactivate presenter"+loc,(current_user)=>{
+        $('#presenter_message').text('');
+      })
       $("#e_presenter").click(()=>{
-
-
+        socket.emit("deactivate presenter",{loc:loc,presenter_name:current_user});
+          $('#presenter_message').text(``);
         presenter = false;
 
       });
@@ -462,12 +436,13 @@
 
       $('form').submit(function(){
 
-      //  alert(rc.user_comment);
+        console.log(inputForm.getValue());
         var rc = {
+          user_code:inputForm.getValue(),
           file_name:currentFileName,//take the value from the value assigned in the variable
           user_comment:$('#m').val(),
           line_number:$('#l').val(),
-          user_name:"pranav"
+          user_name:current_user
         };
         var value = {val : rc, loc:loc}
 
@@ -522,7 +497,7 @@
       socket.on('file uploaded'+loc, function(msg){
         console.log('file name'+msg.fileName);
         $( "#fileList" ).append( $( "<a class='file nav-link' href='#item-2'>"+msg.fileName+"</a> " ));
-        
+
 
         });
 
@@ -671,7 +646,7 @@ var files = $(this).get(0).files;
     contentType: false,
     success: function(data){
         console.log('upload successful!\n' + data);
-        
+
           var value = {fileName:file.name, loc:loc}
           socket.emit("file uploaded",value);
     },
@@ -698,6 +673,11 @@ var files = $(this).get(0).files;
   });
  }
 });
+
+
+
+
+
 
 });
 
