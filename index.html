@@ -9,7 +9,7 @@
         <title>Code Fix</title>
 
         <!-- CSS -->
-        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
         <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
 		<link rel="stylesheet" href="/assets/css/form-elements.css">
@@ -35,7 +35,7 @@
 
         <!-- Top content -->
         <div class="top-content">
-        	
+
             <div class="inner-bg">
                 <div class="container">
                     <div class="row">
@@ -50,9 +50,9 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6 col-sm-offset-3 form-box">
-                        	
+
                             <div class="form-bottom">
-			                    
+
 			                    	<div class="form-group">
 			                    		<label class="sr-only" >Username</label>
 			                        	<input id = "username" type="text"  placeholder="Username..." class="form-username form-control" >
@@ -65,10 +65,10 @@
 		                    </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
-            
+
         </div>
 
         <!-- Javascript -->
@@ -79,7 +79,7 @@
 
 
         <script >
-        
+
 
             $(function () {
                 //window.location.href +='project/'+$('#space').val();
@@ -92,7 +92,7 @@
 
                 // });
                 $('#btn').click(function(){
-                   
+
                     localStorage.setItem('codefix_user', $('#username').val());
                     var url=window.location.href+'project/'+$('#space').val()
                     window.location.href = url;
@@ -103,7 +103,7 @@
 
         </script>
 
-        
+
         <!--[if lt IE 10]>
             <script src="assets/js/placeholder.js"></script>
         <![endif]-->
