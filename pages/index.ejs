@@ -535,7 +535,7 @@
 
       socket.on('file uploaded'+loc, function(msg){
         console.log('file name'+msg.fileName);
-        $( "#fileList" ).append( $( "<a class='file nav-link' href='#item-2'>"+msg.fileName+"</a> " ));
+        $( "#fileList" ).append( $( "<li class = 'list-custom'><a class='file nav-link' href='#item-2'>"+msg.fileName+"</a> </li>" ));
 
 
         });
