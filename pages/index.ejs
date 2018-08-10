@@ -32,6 +32,9 @@
     .card-header:first-child {
       background-color: #ffe8e8;
     }
+    #presenter_message{
+      color:red
+    }
 
     /* .tree, .tree ul {
         margin:0;
@@ -134,7 +137,7 @@
         <li class="nav-item">
           <button type="button" class="btn btn btn-danger" id="e_presenter" href="#">Stop Presenting</a>
         </li>
-        
+
         <li class="nav-item">
           <a  id="presenter_message" class="nav-link active float right" href="#"></a>
         </li>
@@ -216,7 +219,7 @@
             <div class="card-body">
               <blockquote class="blockquote mb-0">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                <footer class="blockquote-footer">Pranav <cite title="Source Title">Source Title</cite></footer>
+                <footer class="blockquote-footer">Sachin <cite title="Source Title">Source Title</cite></footer>
 
 
               </blockquote>
@@ -228,7 +231,7 @@
                 <textarea name="name" rows="4" id="cid1">
 
                 </textarea>
-                <footer class="blockquote-footer">Nisarga <cite title="Source Title">Source Title</cite></footer>
+                <footer class="blockquote-footer">Pranav <cite title="Source Title">Source Title</cite></footer>
               </blockquote>
             </div>
           </div>
@@ -236,7 +239,7 @@
             <div class="card-body">
               <blockquote class="blockquote mb-0">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                <footer class="blockquote-footer">Pranav <cite title="Source Title" class="float-right">Source Title</cite></footer>
+                <footer class="blockquote-footer">Hemant <cite title="Source Title" class="float-right">Source Title</cite></footer>
               </blockquote>
 
             </div>
@@ -383,9 +386,11 @@
         presenter = presenter?false:true;
         if(presenter){
           socket.emit("activate presenter",{loc:loc,presenter_name:current_user});
+          $('#presenter_message').text(`● ${current_user} is currently presenting` );
 
         }else{
           socket.emit("deactivate presenter",{loc:loc,presenter_name:current_user});
+          $('#presenter_message').text('');
         }
 
         var value = {loc:loc}
@@ -394,15 +399,15 @@
       });
 
       socket.on("activate presenter"+loc,(current_user)=>{
-        $('#presenter_message').text(`${current_user} is currently presenting` );
-        alert(current_user +'is the presenter');
+        $('#presenter_message').text(`● ${current_user} is currently presenting` );
+
       })
       socket.on("deactivate presenter"+loc,(current_user)=>{
-        alert('no presenter');
+        $('#presenter_message').text('');
       })
       $("#e_presenter").click(()=>{
         socket.emit("deactivate presenter",{loc:loc,presenter_name:current_user});
-
+          $('#presenter_message').text(``);
         presenter = false;
 
       });
