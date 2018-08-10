@@ -35,6 +35,38 @@
     #presenter_message{
       color:red
     }
+    ul {
+  list-style-type: none;
+}
+  .upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  padding-left: 20px;
+  padding-top: 10px;
+  bottom: 60px;
+  position: fixed;
+
+}
+
+.btn-upload {
+  border: 2px solid gray;
+  color: gray;
+  background-color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  
+}
 
     /* .tree, .tree ul {
         margin:0;
@@ -125,7 +157,7 @@
 
 
 
-      <ul class="nav">
+      <ul class="nav unstyled">
         <a class="navbar-brand" href="#">
           <img src="https://cdn.dribbble.com/users/1086247/screenshots/3542599/cfmonogram2.png" width="40" height="40" alt="">
         </a>
@@ -152,22 +184,29 @@
           <!-- <a class="file nav-link" href="#item-2">trigger.txt</a> -->
           <div>
             <div>
-              <div class="card">
-                <div class="card-header">
-                  Files
-                </div>
-              </div>
+                
 
             </div>
+<div class="card">
+
+<div class="card-header">
+              FILES
+            </div></div>
+
+            
+           <ul>       
           <div id="fileList">
             <% files.forEach(function(fileName){ %>
-               <li><a class="file " href="#item-2"><%= fileName %></a></li>
+               <li class = "list-custom"><a class="file " href="#item-2"><%= fileName %></a></li>
             <%  }); %>
           </div>
-          <input id="upload-input" type="file" name="uploads[]" multiple="multiple"></br>
-          <button id ="upload-btn" class="btn btn-primary">Upload</button>
-        </div>
+          </ul>
 
+        </div>
+<div class="upload-btn-wrapper">
+  <button class="btn-upload">Upload Files</button>
+ <input id="upload-input" type="file" name="uploads[]" multiple="multiple"></br>
+</div>
 
         </div>
         <div class="col-7 code" data-spy="scroll">
@@ -175,7 +214,7 @@
           <!-- <pre id="messages"></pre> -->
           <div class="card">
               <div class="card-header">
-                CODE BLOG <span class="float-right" id="currentFileName"></span>
+                CODE  <span class="float-right" id="currentFileName"></span>
               </div>
               <div class="card-body">
                 <textarea  id="codesnippet_readonly" name="codesnippet_readonly">
@@ -193,7 +232,7 @@
 
 
             <div class="card-header">
-              Review Comments
+              REVIEW COMMENTS
             </div>
           </div>
           <div class="comments" id="review_comments">
