@@ -41,15 +41,18 @@ app.get('/project/*', function(req, res){
 
     if(err){
       console.log(err);
-      if(err.code === 'EEXIST'){
+
+      if(err.code != 'EEXIST'){
         var comments = [];
         console.log('Folder already exisits')
         Comment.fetchComments({"space_name":param})
         .then((resolve,reject)=>{
-          fs.readdir(__dirname+`/test-${param}`,(err,files)=>{
+        //  fs.readdir(__dirname+`/test-${param}`,(err,files)=>{
             console.log('print resolve');
             console.log(resolve.comments);
-            axios.get('https://api.github.com/repos/pranav0073/codefix/contents')
+            //axios.get('https://api.github.com/repos/pranav0073/codefix/contents')
+            console.log(`https://api.github.com/repos/${param}/contents`);
+            axios.get(`https://api.github.com/repos/${param}/contents`)
             .then(function(response){
               var files = response.data.filter(entity => entity.type == 'file');
               var names=[];
@@ -61,7 +64,7 @@ app.get('/project/*', function(req, res){
               console.log(exce);
             })
 
-          })
+          //})
         }).catch((err)=>{
           console.log(err);
         })
@@ -145,7 +148,9 @@ io.on('connection', function(socket){
     console.log(msg.loc);
     console.log(msg.val);
 
-    axios.get(`https://api.github.com/repos/pranav0073/codefix/contents/${msg.val}?ref=master`)
+    var repo = msg.loc.substring(9,msg.loc.length);
+    console.log(`https://api.github.com/repos/${repo}/contents/${msg.val}?ref=master`)
+    axios.get(`https://api.github.com/repos/${repo}/contents/${msg.val}?ref=master`)
     .then(function (response) {
 
       var b64string = response.data.content;
