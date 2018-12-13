@@ -204,8 +204,11 @@
 
         </div>
 <div class="upload-btn-wrapper">
-  <button class="btn-upload">Upload Files</button>
- <input id="upload-input" type="file" name="uploads[]" multiple="multiple"></br>
+  <input type="text" placeholder="{username}/{repo}" id="newRepo" value=""/><br/>
+  <button class="" id="updateRepo">Update Repo</button>
+
+<!--  <button class="btn-upload">Upload Files</button> -->
+ <!--<input id="upload-input" type="file" name="uploads[]" multiple="multiple"></br>-->
 </div>
 
         </div>
@@ -418,6 +421,11 @@
         return marker;
       }
 
+      $("#updateRepo").click(()=>{
+        var newRepo = $("#newRepo").val();
+        socket.emit("update-repo",{loc:loc,repo:newRepo});
+        //alert(newRepo);
+      })
 
       $("#s_presenter").click(()=>{
 
@@ -436,6 +444,11 @@
         socket.emit("presenter changed",value);
 
       });
+
+      socket.on("update-repo"+loc, (repo)=>{
+        alert("repo updated");
+        alert(repo);
+      })
 
       socket.on("activate presenter"+loc,(current_user)=>{
         $('#presenter_message').text(`● ${current_user} is currently presenting` );

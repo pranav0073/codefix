@@ -4,6 +4,7 @@ var fs = require('fs');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var process = require('process');
+var axios = require('axios');
 
 var path = require('path');
 var formidable = require('formidable');
@@ -12,7 +13,7 @@ var Comment = require(__dirname+'/Utils/fetchComments');
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
-app.get('/', function(req, res){  
+app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
@@ -30,7 +31,8 @@ app.get('/about', function(req, res){
 });
 
 app.get('/project/*', function(req, res){
-  //create a folder
+  //get all the contents of the repository
+
 
   var param = req.url.substring(9, req.url.length);
   console.log('param value' +param);
@@ -47,7 +49,18 @@ app.get('/project/*', function(req, res){
           fs.readdir(__dirname+`/test-${param}`,(err,files)=>{
             console.log('print resolve');
             console.log(resolve.comments);
-            res.render(__dirname + '/pages/index',{files:files,comments:resolve.comments.reverse()});
+            axios.get('https://api.github.com/repos/pranav0073/codefix/contents')
+            .then(function(response){
+              var files = response.data.filter(entity => entity.type == 'file');
+              var names=[];
+              files.forEach(f=> names.push(f.name));
+              console.log(names);
+                res.render(__dirname + '/pages/index',{files:names,comments:resolve.comments.reverse()});
+            })
+            .catch(function(exce){
+              console.log(exce);
+            })
+
           })
         }).catch((err)=>{
           console.log(err);
@@ -131,13 +144,29 @@ io.on('connection', function(socket){
     console.log(msg);
     console.log(msg.loc);
     console.log(msg.val);
-    fs.readFile(`${__dirname}/test-${msg.loc.substring(9, msg.loc.length)}/${msg.val}`,'utf8',(err,data)=>{
+
+    axios.get(`https://api.github.com/repos/pranav0073/codefix/contents/${msg.val}?ref=master`)
+    .then(function (response) {
+
+      var b64string = response.data.content;
+      var buf = "test";
+      buf = new Buffer(b64string, 'base64');
+      console.log(buf.toString('utf8'));
+
+      io.emit('current file'+msg.loc,msg.val);
+      io.emit('file select'+msg.loc, buf.toString('utf8'));
+      //console.log(response.data.content);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    /*fs.readFile(`${__dirname}/test-${msg.loc.substring(9, msg.loc.length)}/${msg.val}`,'utf8',(err,data)=>{
 
       if(err)
         console.log(err);
       io.emit('current file'+msg.loc,msg.val);
       io.emit('file select'+msg.loc, data);
-    });
+    });*/
   });
 
   socket.on('presenter changed',function(msg){
@@ -145,6 +174,12 @@ io.on('connection', function(socket){
       console.log('presenter changed');
       socket.broadcast.emit('presenter changed'+msg.loc, {flag:false});
 
+  });
+
+  socket.on('update-repo',function(msg){
+      console.log('update-repo');
+      console.log(msg);
+      socket.broadcast.emit('update-repo'+msg.loc, msg.repo);
   });
 
   socket.on('activate presenter',function(msg){
